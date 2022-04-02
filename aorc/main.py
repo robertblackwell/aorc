@@ -2,7 +2,7 @@ import sys
 import os
 import curses
 import subprocess
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 requiredHeight = 30
 requiredWidth = 180
 
