@@ -30,6 +30,7 @@ version = re.search(
     re.M
 ).group(1)
 
+description="A python script using curses to front-end a network control script. Personal tool only.",
 setup(
     name="aorc",
     packages=["aorc"],
@@ -37,18 +38,18 @@ setup(
         "console_scripts": ['aorc = aorc.main:main']
     },
     version=version,
-    description="A python script using curses to front end a network control script. Personal tool only.",
-    long_description=long_description,
+    description = description,
+    long_description=description,
 
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.8+',
         'Intended Audience :: System Administrators',
         'Topic :: System :: Systems Administration',
         'Topic :: Utilities'],
 
-    keywords='C++, package install',
+    keywords='',
 
     test_suite="tests.test_aorc",
 
