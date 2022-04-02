@@ -1,0 +1,77 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Python runner.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/runner.py",
+            "cwd":"${workspaceFolder}/project_pig",
+            "args":["--config-file", "${workspaceFolder}/project_pig/smpl.json", "--log-actions", "all", "openssl"],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "test_object",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/test_object.py",
+            "cwd":"${workspaceFolder}/tests",
+            "env":{"PYHTONPATH":"${workspaceFolder}/smpl:${workspaceFolder}:${PYTHONPATH}"},
+            "args":[],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "test_logger",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/test_logger.py",
+            "cwd":"${workspaceFolder}/tests",
+            "env":{"PYHTONPATH":"${workspaceFolder}/smpl:${workspaceFolder}:${PYTHONPATH}"},
+            "args":[],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "run_exec",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/smpl/exec.py",
+            "cwd":"${workspaceFolder}/tests/test_exec",
+            "env":{"PYHTONPATH":"${workspaceFolder}/smpl:${workspaceFolder}:${PYTHONPATH}"},
+            "args":[],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "test_exec",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/test_exec.py",
+            "cwd":"${workspaceFolder}/tests/test_exec",
+            "env":{"PYHTONPATH":"${workspaceFolder}/smpl:${workspaceFolder}:${PYTHONPATH}"},
+            "args":[],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "open",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/popen.py",
+            "cwd":"${workspaceFolder}/tests",
+            "env":{"PYHTONPATH":"${workspaceFolder}/smpl:${workspaceFolder}:${PYTHONPATH}"},
+            "args":[],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "run file",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "cwd":"${workspaceFolder}/test",
+            "args":["--config-file", "${workspaceFolder}/project_pig/smpl.json", "--log-actions"],
+            "console": "integratedTerminal"
+        }
+    ]
+}

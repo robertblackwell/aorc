@@ -1,0 +1,10 @@
+/configure router policy-options abort
+/configure router policy-options begin
+/configure router policy-options prefix-list  prefix 192.168.1.0/24 longer
+/configure router policy-options policy-statement ddos2-dynamic-check entry 1 description 
+/configure router policy-options policy-statement ddos2-dynamic-check entry 1 from prefix-list 
+/configure router policy-options policy-statement ddos2-dynamic-check entry 1 from family ipv4
+/configure router policy-options policy-statement ddos2-dynamic-check entry 1 action next-policy community replace ddos2-aorc ddos-global-scrubbers
+/configure router policy-options policy-statement ddos2-dynamic-check entry 1 action next-policy local-preference 3100100250
+/configure router policy-options policy-statement ddos2-dynamic-check entry 1 action next-policy next-hop 192.168.0.1
+/configure router policy-options commit

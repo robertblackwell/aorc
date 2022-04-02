@@ -1,0 +1,10 @@
+{
+    "python.pythonPath": "/usr/bin/python3",
+    "python.analysis.extraPaths": ["smpl", "smpl/smpl", "tests"],
+    "workbench.tree.indent": 40,
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": true,
+        "strings": true
+    }
+}
