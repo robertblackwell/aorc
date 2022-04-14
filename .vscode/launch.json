@@ -10,8 +10,8 @@
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/runner.py",
-            "cwd":"${workspaceFolder}/project_pig",
-            "args":["--config-file", "${workspaceFolder}/project_pig/smpl.json", "--log-actions", "all", "openssl"],
+            "cwd":"${workspaceFolder}",
+            "args":[],
             "console": "integratedTerminal"
         },
         {

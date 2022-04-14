@@ -1,16 +1,22 @@
 NOC_SHEBANG="--python-shebang='/usr/bin/env python'"
 MYNAME="Robert Blackwell"
 MYEMAIL="rob@whiteacorn.com"
-PROJECT_NAME="smpl"
+PROJECT_NAME="aorc"
 LICENSE=MIT
-PREFIX=$(HOME)/.local
+# PREFIX=$(HOME)/.local
 NEW_VERSION=
 PYTHON=python3
 # this is rag-tap collection of convenience options, without any systematic
 # set for buildiing and distributing. Sorry
 
-install:
-	$(PYTHON) setup.py install --prefix=$(PREFIX) 
+mkvenv:
+	python3 -m virtualenv venv
+
+install_requirements:
+	python3 -m pip install -r requirements.txt
+
+# install:
+# 	$(PYTHON) setup.py install --prefix=$(PREFIX) 
 
 clean:
 	$(PYTHON) setup.py clean

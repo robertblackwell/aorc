@@ -82,10 +82,13 @@ def run_add_prefix_new(app, view: View, context):
         if type(v) != list:
             invalid_values[k] = "prefixes should be a list of string values got {}".format(type(v))
         else:
+            vals = []
             for s in v:
                 ip = validator.IPNetwork().validate(s)
                 if ip is None:
-                    invalid_values[k] = s
+                    vals.append(s)
+            if len(vals) > 0:
+                invalid_values[k] = vals
 
     def check_boolean(k):
         v = view_values[k]
