@@ -9,14 +9,14 @@ Start by confirming the python version:
 ```
 python3 --version
 ```
-if this doe not repond
+if this does not repond
 ```
 Python 3.6.15
 ```
 then we need to think a little deeper; so stop.
 
 ### step 2 - Create a virtual environment
-If we are ok with that setp then proceed. The `makefile` calls `python3` which we are now assuming is `python3.6`
+If we are ok with that step then proceed. The `makefile` calls `python3` which we are now assuming is `python3.6`
 
 Create a virtual environment with
 ```
@@ -33,7 +33,7 @@ install that repo as a dependency with:
 ```
 make install_requirements
 ```
-###step 4 Activate the virtual environment
+### step 4 Activate the virtual environment
 Activate the virtual environment with:
 
 ```
