@@ -9,6 +9,8 @@ PYTHON=python3
 # this is rag-tap collection of convenience options, without any systematic
 # set for buildiing and distributing. Sorry
 
+
+
 mkvenv:
 	python3 -m virtualenv venv
 
@@ -21,8 +23,10 @@ install_requirements:
 clean:
 	$(PYTHON) setup.py clean
 	rm -rfv ./build
-	rm *whl 
-	rm *.pex
+	rm *whl || true
+	rm *.pex || true
+	rm -rf env3.6/lib/python3.6/site-packages/simple_curses* || true
+
 
 push:
 	git status

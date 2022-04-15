@@ -1,1 +1,1 @@
--e git+https://github.com/robertblackwell/simple_curses.git@237acfbe62df9b48b5b3d70eecb10e48532edb62#egg=simple_curses
+simple-curses @ git+https://github.com/robertblackwell/simple_curses@f11abb67c8d99953cd31b68a895c170dc3ad5eb1
