@@ -1,1 +1,1 @@
-simple-curses @ git+https://github.com/robertblackwell/simple_curses@f11abb67c8d99953cd31b68a895c170dc3ad5eb1
+simple-curses @ git+https://github.com/robertblackwell/simple_curses@0c76efebc8c15430c9977d1a040af0a687830cff

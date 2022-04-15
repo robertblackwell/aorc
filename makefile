@@ -10,10 +10,19 @@ PYTHON=python3
 # set for buildiing and distributing. Sorry
 
 
-
+# make a virtual environment
 mkvenv:
 	python3 -m virtualenv venv
 
+# upgrade to the latest release of simple_curses
+upgrade_simple_curses:
+	python3 -m pip install --upgrade git+https://github.com/robertblackwell/simple_curses
+
+# freeze requirements
+freeze: 
+	python3 -m pip freeze > requirements.txt
+
+#install dependencies from requirements file
 install_requirements:
 	python3 -m pip install -r requirements.txt
 
