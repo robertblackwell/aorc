@@ -3,8 +3,6 @@ import os
 import curses
 import subprocess
 __version__ = "0.3.0"
-requiredHeight = 30
-requiredWidth = 180
 
 # print(sys.path)
 test_dir = os.path.dirname(__file__)
@@ -32,12 +30,12 @@ from aorc.actions import run_add_prefix_new, view_cancel, run_add_prefix_notnew,
 from aorc.config_actions import run_config_action
 
 
-def test_screen_size(stdscr):
+def test_screen_size(stdscr, required_height, required_width):
     h, w = stdscr.getmaxyx()
-    if h < requiredHeight or w < requiredWidth:
+    if h < required_height or w < required_width:
         raise Exception(
             "SCreen is too small must be at least {} high and {} wide currently is high: {} wide: {}".format(
-                requiredHeight, requiredWidth, h, w))
+                required_height, required_width, h, w))
 
 
 def menu_action_0(app, view, context):
@@ -80,12 +78,12 @@ class App(AppBase):
                 self.views = [view_banner, view_help, view_data_entry_01]
     """
 
-    def __init__(self, stdscr, body_height, body_width, context, input_timeout_ms=2):
+    def __init__(self, stdscr, body_height, width, msg_height=20, context=None, input_timeout_ms=2):
         # do not mosify this line
 
         self.state = AorcState()
 
-        super().__init__(stdscr, body_height, body_width, context)
+        super().__init__(stdscr, body_height, width, msg_height=10, context=context)
 
     def register_views(self):
         # start of customization
@@ -100,15 +98,23 @@ class App(AppBase):
         add_prefixes_new_install_widgets = [
 
             TextWidget(self, "cust_name", "Cust name           ", 23, data),
-            TextWidget(self, "bus_org_id", "Business Org ID     ", 23, data),
-            ToggleWidget(self, "is_marvel_order", "Is a Marvel Order   ", 3, data, ['No ', "Yes"]),
-            ToggleWidget(self, "is_dm_order", "Is a DM order       ", 3, data, ['No ', "Yes"]),
+            BlockTextWidget(self, [
+                    "Order Type:",
+                    "    Either enter a Business Org Id or", 
+                    "    select one of", 
+                    "    Marvel order or DM order"
+            ]),
+            TextWidget(self, "bus_org_id",        "Business Org ID ", 23, data),
+            ToggleWidget(self, "is_marvel_order", "Marvel Order ?  ", 3, data, ['No ', "Yes"]),
+            ToggleWidget(self, "is_dm_order",     "DM order     ?  ", 3, data, ['No ', "Yes"]),
+            BlockTextWidget(self, [" "," "]),
+
             ToggleWidget(self, "is_aorc_capitalized",
-                         "Is aorc capitalized ", 3, data, ['No ', "Yes"]),
+                                                  "Is aorc capitalized            ", 3, data, ['No ', "Yes"]),
 
             IntegerWidget(self, "nokia_entry_nbr",
-                          "New install Nokia entry number ", 23, data),
-            IPAddressWidget(self, "next_hop_ip", "New install Next hop IP        ", 23, data),
+                                                  "New install Nokia entry number ", 23, data),
+            IPAddressWidget(self, "next_hop_ip",  "New install Next hop IP        ", 23, data),
 
             IPNetworkCIDR(app=self, key="prefixes", label="Prefixes", content_width=50,
                           content_height=20, data=data),
@@ -268,11 +274,13 @@ class App(AppBase):
 
 def main(stdscr):
     data = "dummy context"
-    test_screen_size(stdscr)
+    required_height = 36
+    required_width = 128
+    test_screen_size(stdscr, required_height, required_width)
     curses.curs_set(2)
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
-    app = App(stdscr, 36, 180, data)
+    app = App(stdscr, body_height=required_height, width=required_width, context=data)
     app.run()
 
 
