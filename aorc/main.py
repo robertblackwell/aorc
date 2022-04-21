@@ -26,7 +26,7 @@ from simple_curses import *
 # from simple_curses.appbase import AppBase
 
 from aorc.state import AorcState
-from aorc.actions import run_add_prefix_new, view_cancel, run_add_prefix_notnew, run_remove_prefix_disconnect, run_remove_prefix_notdisconnect
+from aorc.actions import program_cancel, run_add_prefix_new, view_cancel, run_add_prefix_notnew, run_remove_prefix_disconnect, run_remove_prefix_notdisconnect
 from aorc.config_actions import run_config_action
 
 
@@ -122,6 +122,7 @@ class App(AppBase):
 
         add_prefixes_new_install_menu = [
             # MenuItem(self, "Validate", 13, 3, 0, validate, "context for menu 1"),
+            MenuItem(self, "Exit Program", 14, 3, 0, program_cancel, ""),
             MenuItem(self, "Cancel", 7, 3, 0, view_cancel, "context for menu 2"),
             MenuItem(self, "Ok-Run", 7, 3, 0, run_add_prefix_new, "context for menu 3")
         ]
@@ -151,6 +152,7 @@ class App(AppBase):
 
         add_prefixes_not_new_install_menu = [
             # MenuItem(self, "Validate", 13, 3, 0, validate, "context for menu 1"),
+            MenuItem(self, "Exit Program", 14, 3, 0, program_cancel, ""),
             MenuItem(self, "Cancel", 7, 3, 0, view_cancel, "context for menu 2"),
             MenuItem(self, "Ok-Run", 7, 3, 0, run_add_prefix_notnew, "context for menu 3")
         ]
@@ -181,6 +183,7 @@ class App(AppBase):
 
         remove_prefixes_with_disconnect_menu = [
             # MenuItem(self, "Validate", 13, 3, 0, validate, "context for menu 1"),
+            MenuItem(self, "Exit Program", 14, 3, 0, program_cancel, ""),
             MenuItem(self, "Cancel", 7, 3, 0, view_cancel, "context for menu 2"),
             MenuItem(self, "Ok-Run", 7, 3, 0, run_remove_prefix_disconnect, "context for menu 3")
         ]
@@ -211,6 +214,7 @@ class App(AppBase):
 
         remove_prefixes_not_with_disconnect_menu = [
             # MenuItem(self, "Validate", 13, 3, 0, validate, "context for menu 1"),
+            MenuItem(self, "Exit Program", 14, 3, 0, program_cancel, ""),
             MenuItem(self, "Cancel", 7, 3, 0, view_cancel, "context for menu 2"),
             MenuItem(self, "Ok-Run", 7, 3, 0, run_remove_prefix_notdisconnect, "context for menu 3")
         ]
@@ -250,6 +254,7 @@ class App(AppBase):
         ]
 
         config_menu = [
+            MenuItem(self, "Exit Program", 14, 3, 0, program_cancel, ""),
             MenuItem(self, "Cancel", 7, 3, 0, view_cancel, "context for menu 2"),
             MenuItem(self, "Save", 7, 3, 0, run_config_action, "context for menu 3")
         ]
@@ -263,12 +268,12 @@ class App(AppBase):
         # the next line is required - do not change
         self.views = [
             add_prefixes_new_install_view,
-            add_prefixes_not_new_install_view,
-            remove_prefixes_with_disconnect_view,
-            remove_prefixes_not_with_disconnect_view,
+            # add_prefixes_not_new_install_view,
+            # remove_prefixes_with_disconnect_view,
+            # remove_prefixes_not_with_disconnect_view,
             config_view,
             view_banner,
-            view_help,
+            # view_help,
         ]
 
 
