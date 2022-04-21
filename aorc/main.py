@@ -2,7 +2,7 @@ import sys
 import os
 import curses
 import subprocess
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 
 # print(sys.path)
 test_dir = os.path.dirname(__file__)
