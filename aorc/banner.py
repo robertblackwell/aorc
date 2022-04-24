@@ -28,7 +28,64 @@ from pyfiglet import Figlet
 from aorc.state import AorcState
 from aorc.actions import program_cancel, run_add_prefix_new, view_cancel, run_add_prefix_notnew, run_remove_prefix_disconnect, run_remove_prefix_notdisconnect
 from aorc.config_actions import run_config_action
-from aorc.banner import aorc_banner
+def banner():
+    def string_pad_both_ends(candidate, length):
+        s = candidate
+        while len(s) < length:
+            s = s + " "
+            if len(s) < length:
+                s = " " + s
+        return s
+    def string_pad_right(candidate, length):
+        s = candidate
+        while len(s) < length:
+            s = s + " "
+        return s
+
+    def fig_it(astr):
+        c = Figlet(font="big")
+        s = c.renderText(astr)
+        lines = s.split('\n')
+        return lines
+
+    def longest_line(lines):
+        max = 0
+        for line in lines:
+            len(line)
+            max = len(line) if len(line) > max else max
+        return max
+    
+    def pad_fig(lines):
+        newlines = []
+        length = longest_line(lines)
+        for line in lines:
+            newlines.append(string_pad_right(line, length))
+        return newlines
+
+    banner_lines = [
+                "****************************************************",
+                "*                      AORC                        *",
+                "*                                                  *",
+                "*    For issues with this script, please reach     *",
+                "*              out to Fred TheCoder                *",
+                "*                                                  *",
+                "*             fred@the_coder.io                    *",
+                "****************************************************",
+    ]
+    last_line = "****************************************************"
+    aorc_v_line =  string_pad_both_ends("Aorc version v{}".format(__version__), len(last_line))
+    sc_vline =    string_pad_both_ends("simple_curses version v{}".format(simple_curses_version()), len(last_line))
+    banner_lines.append(aorc_v_line)
+    banner_lines.append(sc_vline)
+    figs = fig_it("AORC")
+    good_figs = []
+    for line in figs:
+        good_figs.append(string_pad_both_ends(line, len(last_line)))
+    
+    good_figs.append(aorc_v_line)
+    good_figs.append(sc_vline)
+    return good_figs
+
 
 def menu_action_0(app, view, context):
     app.msg_info("menu action 0")
@@ -81,7 +138,7 @@ class App(AppBase):
         # start of customization
         data = self.state
 
-        view_banner = BannerView(self, "bview_01", "Banner View", self.stdscr, BlockTextWidget(self, aorc_banner()))
+        view_banner = BannerView(self, "bview_01", "Banner View", self.stdscr, BlockTextWidget(self, banner()))
         view_help = BannerView(self, "help_01", "Help   View", self.stdscr, HelpWidget(self))
 
         ##########################################################

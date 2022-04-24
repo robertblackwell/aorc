@@ -25,5 +25,6 @@ rm -rf env3.6 || true
 ${python36} -m virtualenv env3.6
 source env3.6/bin/activate
 make upgrade_simple_curses
+python3 -m pip install pyfiglet
 make freeze
 ${python36} runner.py
