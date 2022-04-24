@@ -1,15 +1,11 @@
 import sys
 import os
 import curses
-import subprocess
-__version__ = "0.6.0"
-
-# print(sys.path)
 
 from simple_curses import *
 from pyfiglet import Figlet
 
-def aorc_banner():
+def aorc_banner(version):
     """
     This function returns an List[str] containing a 'banner' for the aorc app
     """
@@ -57,7 +53,7 @@ def aorc_banner():
                 "****************************************************",
     ]
     last_line = "****************************************************"
-    aorc_v_line =  string_pad_both_ends("Aorc version v{}".format(__version__), len(last_line))
+    aorc_v_line =  string_pad_both_ends("Aorc version v{}".format(version), len(last_line))
     sc_vline =    string_pad_both_ends("simple_curses version v{}".format(simple_curses_version()), len(last_line))
     banner_lines.append(aorc_v_line)
     banner_lines.append(sc_vline)

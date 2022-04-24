@@ -81,7 +81,7 @@ class App(AppBase):
         # start of customization
         data = self.state
 
-        view_banner = BannerView(self, "bview_01", "Banner View", self.stdscr, BlockTextWidget(self, aorc_banner()))
+        view_banner = BannerView(self, "bview_01", "Banner View", self.stdscr, BlockTextWidget(self, aorc_banner(__version__)))
         view_help = BannerView(self, "help_01", "Help   View", self.stdscr, HelpWidget(self))
 
         ##########################################################
