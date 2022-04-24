@@ -28,14 +28,32 @@ from simple_curses import *
 from aorc.state import AorcState
 from aorc.actions import program_cancel, run_add_prefix_new, view_cancel, run_add_prefix_notnew, run_remove_prefix_disconnect, run_remove_prefix_notdisconnect
 from aorc.config_actions import run_config_action
+def banner():
+    def string_pad(candidate, length):
+        s = candidate
+        while len(s) < length:
+            s = s + " "
+            if len(s) < length:
+                s = " " + s
+        return s
 
 
-def test_screen_size(stdscr, required_height, required_width):
-    h, w = stdscr.getmaxyx()
-    if h < required_height or w < required_width:
-        raise Exception(
-            "SCreen is too small must be at least {} high and {} wide currently is high: {} wide: {}".format(
-                required_height, required_width, h, w))
+    banner_lines = [
+                "****************************************************",
+                "*                      AORC                        *",
+                "*                                                  *",
+                "*    For issues with this script, please reach     *",
+                "*              out to Fred TheCoder                *",
+                "*                                                  *",
+                "*             fred@the_coder.io                    *",
+                "****************************************************",
+    ]
+    last_line = "****************************************************"
+    aorc_v_line =  string_pad("Aorc version v{}".format(__version__), len(last_line))
+    sc_vline =    string_pad("simple_curses version v{}".format(simple_curses_version()), len(last_line))
+    banner_lines.append(aorc_v_line)
+    banner_lines.append(sc_vline)
+    return banner_lines
 
 
 def menu_action_0(app, view, context):
@@ -89,35 +107,37 @@ class App(AppBase):
         # start of customization
         data = self.state
 
-        view_banner = BannerView(self, "bview_01", "Banner View", self.stdscr, self.body_win, BannerWidget(self))
-        view_help = BannerView(self, "help_01", "Help   View", self.stdscr, self.body_win, HelpWidget(self))
+        view_banner = BannerView(self, "bview_01", "Banner View", self.stdscr, BlockTextWidget(self, banner()))
+        view_help = BannerView(self, "help_01", "Help   View", self.stdscr, HelpWidget(self))
 
         ##########################################################
         # add prefixes with a new install
         ##########################################################
         add_prefixes_new_install_widgets = [
+            [
+                TextWidget(self, "cust_name", "Cust name           ", 23, data),
+                BlockTextWidget(self, [
+                        "Order Type:",
+                        "    Either enter a Business Org Id or", 
+                        "    select one of", 
+                        "    Marvel order or DM order"
+                ]),
+                TextWidget(self, "bus_org_id",        "Business Org ID ", 23, data),
+                ToggleWidget(self, "is_marvel_order", "Marvel Order ?  ", 3, data, ['No ', "Yes"]),
+                ToggleWidget(self, "is_dm_order",     "DM order     ?  ", 3, data, ['No ', "Yes"]),
+                BlockTextWidget(self, [" "," "]),
 
-            TextWidget(self, "cust_name", "Cust name           ", 23, data),
-            BlockTextWidget(self, [
-                    "Order Type:",
-                    "    Either enter a Business Org Id or", 
-                    "    select one of", 
-                    "    Marvel order or DM order"
-            ]),
-            TextWidget(self, "bus_org_id",        "Business Org ID ", 23, data),
-            ToggleWidget(self, "is_marvel_order", "Marvel Order ?  ", 3, data, ['No ', "Yes"]),
-            ToggleWidget(self, "is_dm_order",     "DM order     ?  ", 3, data, ['No ', "Yes"]),
-            BlockTextWidget(self, [" "," "]),
+                ToggleWidget(self, "is_aorc_capitalized",
+                                                    "Is aorc capitalized            ", 3, data, ['No ', "Yes"]),
 
-            ToggleWidget(self, "is_aorc_capitalized",
-                                                  "Is aorc capitalized            ", 3, data, ['No ', "Yes"]),
-
-            IntegerWidget(self, "nokia_entry_nbr",
-                                                  "New install Nokia entry number ", 23, data),
-            IPAddressWidget(self, "next_hop_ip",  "New install Next hop IP        ", 23, data),
-
-            IPNetworkCIDR(app=self, key="prefixes", label="Prefixes", content_width=50,
-                          content_height=20, data=data),
+                IntegerWidget(self, "nokia_entry_nbr",
+                                                    "New install Nokia entry number ", 23, data),
+                IPAddressWidget(self, "next_hop_ip",  "New install Next hop IP        ", 23, data),
+            ],
+            [
+                IPNetworkCIDR(app=self, key="prefixes", label="Prefixes", content_width=50,
+                            content_height=20, data=data),
+            ]
         ]
 
         add_prefixes_new_install_menu = [
@@ -126,28 +146,41 @@ class App(AppBase):
             MenuItem(self, "Cancel", 7, 3, 0, view_cancel, "context for menu 2"),
             MenuItem(self, "Ok-Run", 7, 3, 0, run_add_prefix_new, "context for menu 3")
         ]
-        add_prefixes_new_install_view = View(self, "add_new_install", "Add prefix - New Install", self.stdscr,
-                                             self.body_win, add_prefixes_new_install_widgets,
-                                             add_prefixes_new_install_menu)
+        add_prefixes_new_install_view = DataEntryView(self, "add_new_install", "Add prefix - New Install", 
+                                            self.stdscr,
+                                            add_prefixes_new_install_widgets,
+                                            add_prefixes_new_install_menu)
 
         ##########################################################
         # add prefixes but NOT with a new install
         ##########################################################
+        sel = [ 
+            (self.state.ORDERTYPE_MARVEL, "Marvel Order"),(self.state.ORDERTYPE_DM, "DM Order"),(self.state.ORDERTYPE_BOID, "Business Ord Id")
+        ]
         add_prefixes_not_new_install_widgets = [
+            [
+                TextWidget(self, "cust_name", "Cust name           ", 23, data),
+                BlockTextWidget(self, [
+                        "Select the order Type",
+                        "    If not Marvel order or DM order",
+                        "    you must enter a Business Org Id or", 
+                ]),
+                DropdownWidget(self, "order_type", "Select Order Type", 23, 1, data, sel),
+                TextWidget(self, "bus_org_id", "Business Org ID     ", 23, data),
+                BlockTextWidget(self, ["-------------------------------------------"]),
+                # ToggleWidget(self, "is_marvel_order", "Is a Marvel Order   ", 3, data, ['No ', "Yes"]),
+                # ToggleWidget(self, "is_dm_order", "Is a DM order       ", 3, data, ['No ', "Yes"]),
+                ToggleWidget(self, "is_aorc_capitalized",
+                            "Is aorc capitalized ", 3, data, ['No ', "Yes"]),
 
-            TextWidget(self, "cust_name", "Cust name           ", 23, data),
-            TextWidget(self, "bus_org_id", "Business Org ID     ", 23, data),
-            ToggleWidget(self, "is_marvel_order", "Is a Marvel Order   ", 3, data, ['No ', "Yes"]),
-            ToggleWidget(self, "is_dm_order", "Is a DM order       ", 3, data, ['No ', "Yes"]),
-            ToggleWidget(self, "is_aorc_capitalized",
-                         "Is aorc capitalized ", 3, data, ['No ', "Yes"]),
-
-            IntegerWidget(self, "nokia_entry_nbr",
-                          "New install Nokia entry number ", 23, data),
-            IPAddressWidget(self, "next_hop_ip", "New install Next hop IP        ", 23, data),
-
-            IPNetworkCIDR(app=self, key="prefixes", label="Prefixes", content_width=50,
+                IntegerWidget(self, "nokia_entry_nbr",
+                            "New install Nokia entry number ", 23, data),
+                IPAddressWidget(self, "next_hop_ip", "New install Next hop IP        ", 23, data),
+            ],
+            [
+                IPNetworkCIDR(app=self, key="prefixes", label="Prefixes", content_width=50,
                           content_height=20, data=data),
+            ]
         ]
 
         add_prefixes_not_new_install_menu = [
@@ -156,8 +189,8 @@ class App(AppBase):
             MenuItem(self, "Cancel", 7, 3, 0, view_cancel, "context for menu 2"),
             MenuItem(self, "Ok-Run", 7, 3, 0, run_add_prefix_notnew, "context for menu 3")
         ]
-        add_prefixes_not_new_install_view = View(self, "add_not_new_install", "Add prefix - NOT - New Install",
-                                                 self.stdscr, self.body_win,
+        add_prefixes_not_new_install_view = DataEntryView(self, "add_not_new_install", "Add prefix - NOT - New Install",
+                                                 self.stdscr, 
                                                  add_prefixes_not_new_install_widgets,
                                                  add_prefixes_not_new_install_menu)
 
@@ -165,20 +198,22 @@ class App(AppBase):
         # remove prefixes with a disconnect
         ##########################################################
         remove_prefixes_with_disconnect_widgets = [
+            [
+                TextWidget(self, "cust_name", "Cust name           ", 23, data),
+                TextWidget(self, "bus_org_id", "Business Org ID     ", 23, data),
+                ToggleWidget(self, "is_marvel_order", "Is a Marvel Order   ", 3, data, ['No ', "Yes"]),
+                ToggleWidget(self, "is_dm_order", "Is a DM order       ", 3, data, ['No ', "Yes"]),
+                ToggleWidget(self, "is_aorc_capitalized",
+                            "Is aorc capitalized ", 3, data, ['No ', "Yes"]),
 
-            TextWidget(self, "cust_name", "Cust name           ", 23, data),
-            TextWidget(self, "bus_org_id", "Business Org ID     ", 23, data),
-            ToggleWidget(self, "is_marvel_order", "Is a Marvel Order   ", 3, data, ['No ', "Yes"]),
-            ToggleWidget(self, "is_dm_order", "Is a DM order       ", 3, data, ['No ', "Yes"]),
-            ToggleWidget(self, "is_aorc_capitalized",
-                         "Is aorc capitalized ", 3, data, ['No ', "Yes"]),
-
-            IntegerWidget(self, "nokia_entry_nbr",
-                          "New install Nokia entry number ", 23, data),
-            IPAddressWidget(self, "next_hop_ip", "New install Next hop IP        ", 23, data),
-
-            IPNetworkCIDR(app=self, key="prefixes", label="Prefixes", content_width=50,
+                IntegerWidget(self, "nokia_entry_nbr",
+                            "New install Nokia entry number ", 23, data),
+                IPAddressWidget(self, "next_hop_ip", "New install Next hop IP        ", 23, data),
+            ],
+            [
+                IPNetworkCIDR(app=self, key="prefixes", label="Prefixes", content_width=50,
                           content_height=20, data=data),
+            ]
         ]
 
         remove_prefixes_with_disconnect_menu = [
@@ -187,8 +222,8 @@ class App(AppBase):
             MenuItem(self, "Cancel", 7, 3, 0, view_cancel, "context for menu 2"),
             MenuItem(self, "Ok-Run", 7, 3, 0, run_remove_prefix_disconnect, "context for menu 3")
         ]
-        remove_prefixes_with_disconnect_view = View(self, "add_not_new_install", "Remove prefixes with disconnect",
-                                                    self.stdscr, self.body_win,
+        remove_prefixes_with_disconnect_view = DataEntryView(self, "add_not_new_install", "Remove prefixes with disconnect",
+                                                    self.stdscr, 
                                                     remove_prefixes_with_disconnect_widgets,
                                                     remove_prefixes_with_disconnect_menu)
 
@@ -196,20 +231,22 @@ class App(AppBase):
         # remove prefixes but NOT with a disconnect
         ##########################################################
         remove_prefixes_not_disconnect_widgets = [
+            [
+                TextWidget(self, "cust_name", "Cust name           ", 23, data),
+                TextWidget(self, "bus_org_id", "Business Org ID     ", 23, data),
+                ToggleWidget(self, "is_marvel_order", "Is a Marvel Order   ", 3, data, ['No ', "Yes"]),
+                ToggleWidget(self, "is_dm_order", "Is a DM order       ", 3, data, ['No ', "Yes"]),
+                ToggleWidget(self, "is_aorc_capitalized",
+                            "Is aorc capitalized ", 3, data, ['No ', "Yes"]),
 
-            TextWidget(self, "cust_name", "Cust name           ", 23, data),
-            TextWidget(self, "bus_org_id", "Business Org ID     ", 23, data),
-            ToggleWidget(self, "is_marvel_order", "Is a Marvel Order   ", 3, data, ['No ', "Yes"]),
-            ToggleWidget(self, "is_dm_order", "Is a DM order       ", 3, data, ['No ', "Yes"]),
-            ToggleWidget(self, "is_aorc_capitalized",
-                         "Is aorc capitalized ", 3, data, ['No ', "Yes"]),
-
-            IntegerWidget(self, "nokia_entry_nbr",
-                          "New install Nokia entry number ", 23, data),
-            IPAddressWidget(self, "next_hop_ip", "New install Next hop IP        ", 23, data),
-
-            IPNetworkCIDR(app=self, key="prefixes", label="Prefixes", content_width=50,
+                IntegerWidget(self, "nokia_entry_nbr",
+                            "New install Nokia entry number ", 23, data),
+                IPAddressWidget(self, "next_hop_ip", "New install Next hop IP        ", 23, data),
+            ],
+            [
+                IPNetworkCIDR(app=self, key="prefixes", label="Prefixes", content_width=50,
                           content_height=20, data=data),
+            ]
         ]
 
         remove_prefixes_not_with_disconnect_menu = [
@@ -219,9 +256,8 @@ class App(AppBase):
             MenuItem(self, "Ok-Run", 7, 3, 0, run_remove_prefix_notdisconnect, "context for menu 3")
         ]
 
-        remove_prefixes_not_with_disconnect_view = View(self, "add_not_new_install",
+        remove_prefixes_not_with_disconnect_view = DataEntryView(self, "add_not_new_install",
                                                         "Remove prefixes - NOT - with disconnect", self.stdscr,
-                                                        self.body_win,
                                                         remove_prefixes_not_disconnect_widgets,
                                                         remove_prefixes_not_with_disconnect_menu)
 
@@ -229,28 +265,28 @@ class App(AppBase):
         # aorc constants configuration
         ##########################################################
         config_widgets = [
+            [
+                BlockTextWidget(self, [
+                    "The following are paths to files that will be created",
+                    "by this program"
+                ]),
 
-            BlockTextWidget(self, [
-                "The following are paths to files that will be created",
-                "by this program"
-            ]),
+                PathWidget(self, "config_exception_file", "Exception File Path    ", 70, data),
+                PathWidget(self, "config_v14_command_file", "V14 Command File Path  ", 70, data),
+                PathWidget(self, "config_quick_push_file", "Quick Push File Path   ", 70, data),
+                PathWidget(self, "config_save_file", "Save File Path         ", 70, data),
+                PathWidget(self, "config_pid_file", "PID File Path          ", 70, data),
 
-            PathWidget(self, "config_exception_file", "Exception File Path    ", 70, data),
-            PathWidget(self, "config_v14_command_file", "V14 Command File Path  ", 70, data),
-            PathWidget(self, "config_quick_push_file", "Quick Push File Path   ", 70, data),
-            PathWidget(self, "config_save_file", "Save File Path         ", 70, data),
-            PathWidget(self, "config_pid_file", "PID File Path          ", 70, data),
+                BlockTextWidget(self, [
+                    ""
+                ]),
 
-            BlockTextWidget(self, [
-                ""
-            ]),
+                BlockTextWidget(self, [
+                    "This next field is string constant used by the program NOT a file path",
+                ]),
 
-            BlockTextWidget(self, [
-                "This next field is string constant used by the program NOT a file path",
-            ]),
-
-            TextWidget(self, "config_policy_name", "DDOS Policy Name Constant ", 70, data),
-
+                TextWidget(self, "config_policy_name", "DDOS Policy Name Constant ", 70, data),
+            ]
         ]
 
         config_menu = [
@@ -259,7 +295,7 @@ class App(AppBase):
             MenuItem(self, "Save", 7, 3, 0, run_config_action, "context for menu 3")
         ]
 
-        config_view = View(self, "config", "AORC Config values", self.stdscr, self.body_win,
+        config_view = DataEntryView(self, "config", "AORC Config values", self.stdscr,
                            config_widgets,
                            config_menu)
 
@@ -268,9 +304,9 @@ class App(AppBase):
         # the next line is required - do not change
         self.views = [
             add_prefixes_new_install_view,
-            # add_prefixes_not_new_install_view,
-            # remove_prefixes_with_disconnect_view,
-            # remove_prefixes_not_with_disconnect_view,
+            add_prefixes_not_new_install_view,
+            remove_prefixes_with_disconnect_view,
+            remove_prefixes_not_with_disconnect_view,
             config_view,
             view_banner,
             # view_help,
@@ -280,7 +316,7 @@ class App(AppBase):
 def main(stdscr):
     data = "dummy context"
     required_height = 36
-    required_width = 128
+    required_width = 140
     test_screen_size(stdscr, required_height, required_width)
     curses.curs_set(2)
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)

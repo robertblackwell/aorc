@@ -2,11 +2,17 @@ import pathlib
 import os
 from typing import Any 
 
+
+
 class AorcState:
     """
     State object for the aorc application
     """
+    
     def __init__(self):
+        self.ORDERTYPE_MARVEL = 10
+        self.ORDERTYPE_DM = 11
+        self.ORDERTYPE_BOID = 12
         self.cust_name = ""
         self.bus_org_id = ""
         self.is_marvel_order = False
@@ -15,6 +21,7 @@ class AorcState:
         self.nokia_entry_nbr = 0
         self.next_hop_ip = "192.168.192.168"
         self.prefixes = []
+        self.order_type = self.ORDERTYPE_BOID
 
         aorc_dir = os.path.dirname(__file__)
         self.config_exception_file = "{}".format(os.path.join(aorc_dir, "stuff/ddos2_exceptions"))
