@@ -6,7 +6,7 @@ from typing import Any, Dict
 from typing import Dict
 from aorc.state import AorcState
 from aorc.aorc_doit import *
-from simple_curses import View
+from simple_curses import *
 import simple_curses.validator as validator
 
 
@@ -17,7 +17,7 @@ def state_from_view_values(old_state: AorcState, view_values: Dict[str, Any]) ->
     return new_state
 
 
-def run_config_action(app, view: View, context):
+def run_config_action(app, view, context):
     
     config_keys = [ 
         "config_exception_file",

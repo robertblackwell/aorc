@@ -273,7 +273,22 @@ class App(AppBase):
                            config_widgets,
                            config_menu)
 
-        # end of customization
+        #####################################
+        # topmenu start
+        #####################################
+        topmenu_items = [ 
+            TopMenuWidget(self, "tm01", "AddNew F1",     0x109, add_prefixes_new_install_view),
+            TopMenuWidget(self, "tm02", "AddNotNew F2",  0x10a, add_prefixes_not_new_install_view),
+            TopMenuWidget(self, "tm03", "RemDisc F3",    0x10b, remove_prefixes_with_disconnect_view),
+            TopMenuWidget(self, "tm04", "RemNotDisc F4", 0x10c, remove_prefixes_not_with_disconnect_view),
+            TopMenuWidget(self, "tm05", "Config F5",     0x10d, config_view),
+            TopMenuWidget(self, "tm06", "Banner F6",     0x10e, view_banner),
+        ]
+        topmenu = TopmenuView(self, FigletWidget("Test"), topmenu_items)
+        #####################################
+        # link views and topmenu to app
+        #####################################
+        self.topmenu_view = topmenu
 
         # the next line is required - do not change
         self.views = [

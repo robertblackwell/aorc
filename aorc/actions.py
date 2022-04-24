@@ -37,7 +37,7 @@ def view_cancel(app, view, context):
     view.set_values(old_state)
     return
 
-def program_cancel(app, view:View, context):
+def program_cancel(app, view, context):
     """Exit the program"""
     app.msg_info("exit")
     sys.exit(0)
@@ -50,7 +50,7 @@ def state_from_view_values(old_state:AorcState, view_values: Dict[str, Any]) -> 
     return new_state
 
 
-def run_add_prefix_new(app, view: View, context):
+def run_add_prefix_new(app, view, context):
     """
     This function gets values from the view passed as second parameter.
     Validates those valees an either 

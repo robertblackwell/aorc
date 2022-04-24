@@ -1,7 +1,7 @@
 # This script prepares the directory to run the aorc app in a virtual environment using pyhton3.6
 python36=
 
-# fiind python3.6
+# find python3.6
 if command -v python3.6 &> /dev/null
 then
     # python3.6 can be called directly
