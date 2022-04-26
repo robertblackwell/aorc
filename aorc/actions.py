@@ -31,13 +31,13 @@ def execute_command(app, cmd_ar: List[str]):
         for line in lines:
             app.msg_error(line)
 
-def view_cancel(app, view, context):
+def view_cancel(app, view):
     """dont update the state, then redisplay the same view with the old state"""
     old_state = app.state
     view.set_values(old_state)
     return
 
-def program_cancel(app, view, context):
+def program_cancel(app, view):
     """Exit the program"""
     app.msg_info("exit")
     sys.exit(0)
@@ -50,7 +50,7 @@ def state_from_view_values(old_state:AorcState, view_values: Dict[str, Any]) -> 
     return new_state
 
 
-def run_add_prefix_new(app, view, context):
+def run_add_prefix_new(app, view):
     """
     This function gets values from the view passed as second parameter.
     Validates those valees an either 
@@ -134,7 +134,7 @@ def run_add_prefix_new(app, view, context):
     app.state = new_state
 
 
-def run_add_prefix_notnew(app, view, context):
+def run_add_prefix_notnew(app, view):
     """
     This function gets values from the view passed as second parameter.
     Validates those valees an either 
@@ -220,9 +220,9 @@ def run_add_prefix_notnew(app, view, context):
     new_state = state_from_view_values(app.state, view_values)
     app.state = new_state
 
-def run_remove_prefix_disconnect(app, view, context):
-    run_add_prefix_new(app, view, context)
+def run_remove_prefix_disconnect(app, view):
+    run_add_prefix_new(app, view)
 
-def run_remove_prefix_notdisconnect(app, view, context):
-    run_add_prefix_new(app, view, context)
+def run_remove_prefix_notdisconnect(app, view):
+    run_add_prefix_new(app, view)
 

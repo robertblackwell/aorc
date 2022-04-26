@@ -81,8 +81,8 @@ class App(AppBase):
         # start of customization
         data = self.state
 
-        view_banner = BannerView(self, "bview_01", "Banner View", self.stdscr, BlockTextWidget(self, aorc_banner(__version__)))
-        view_help = BannerView(self, "help_01", "Help   View", self.stdscr, HelpWidget(self))
+        view_banner = BannerView(self,  "bview_01", "Banner View", self.stdscr, BlockTextWidget(self, aorc_banner(__version__)))
+        # view_help = BannerView(self,    "help_01", "Help   View", self.stdscr, HelpWidget(self))
 
         ##########################################################
         # add prefixes with a new install
@@ -115,10 +115,10 @@ class App(AppBase):
         ]
 
         add_prefixes_new_install_menu = [
-            # MenuItem(self, "Validate", 13, 3, 0, validate, "context for menu 1"),
-            MenuItem(self, "Exit Program", 14, 3, 0, program_cancel, ""),
-            MenuItem(self, "Cancel", 7, 3, 0, view_cancel, "context for menu 2"),
-            MenuItem(self, "Ok-Run", 7, 3, 0, run_add_prefix_new, "context for menu 3")
+            # MenuItem(self, "Validate", 3, 0, validate, "context for menu 1"),
+            MenuItem(self, "Exit Program", 3, FKEY_CTRL_F1,  program_cancel,        ""),
+            MenuItem(self, "Cancel",       3, FKEY_CTRL_F2,  view_cancel,           "context for menu 2"),
+            MenuItem(self, "Ok-Run",       3, FKEY_CTRL_F3,  run_add_prefix_new,    "context for menu 3")
         ]
         add_prefixes_new_install_view = DataEntryView(self, "add_new_install", "Add prefix - New Install", 
                                             self.stdscr,
@@ -159,9 +159,9 @@ class App(AppBase):
 
         add_prefixes_not_new_install_menu = [
             # MenuItem(self, "Validate", 13, 3, 0, validate, "context for menu 1"),
-            MenuItem(self, "Exit Program", 14, 3, 0, program_cancel, ""),
-            MenuItem(self, "Cancel", 7, 3, 0, view_cancel, "context for menu 2"),
-            MenuItem(self, "Ok-Run", 7, 3, 0, run_add_prefix_notnew, "context for menu 3")
+            MenuItem(self, "Exit Program", 3, FKEY_CTRL_F1,  program_cancel,        ""),
+            MenuItem(self, "Cancel",       3, FKEY_CTRL_F2,  view_cancel,           "context for menu 2"),
+            MenuItem(self, "Ok-Run",       3, FKEY_CTRL_F3,  run_add_prefix_notnew, "context for menu 3")
         ]
         add_prefixes_not_new_install_view = DataEntryView(self, "add_not_new_install", "Add prefix - NOT - New Install",
                                                  self.stdscr, 
@@ -191,10 +191,10 @@ class App(AppBase):
         ]
 
         remove_prefixes_with_disconnect_menu = [
-            # MenuItem(self, "Validate", 13, 3, 0, validate, "context for menu 1"),
-            MenuItem(self, "Exit Program", 14, 3, 0, program_cancel, ""),
-            MenuItem(self, "Cancel", 7, 3, 0, view_cancel, "context for menu 2"),
-            MenuItem(self, "Ok-Run", 7, 3, 0, run_remove_prefix_disconnect, "context for menu 3")
+            # MenuItem(self, "Validate", 3, 0, validate, "context for menu 1"),
+            MenuItem(self, "Exit Program", 3, FKEY_CTRL_F1,  program_cancel,                ""),
+            MenuItem(self, "Cancel",       3, FKEY_CTRL_F2,  view_cancel,                   "context for menu 2"),
+            MenuItem(self, "Ok-Run",       3, FKEY_CTRL_F3,  run_remove_prefix_disconnect,  "context for menu 3")
         ]
         remove_prefixes_with_disconnect_view = DataEntryView(self, "add_not_new_install", "Remove prefixes with disconnect",
                                                     self.stdscr, 
@@ -224,10 +224,10 @@ class App(AppBase):
         ]
 
         remove_prefixes_not_with_disconnect_menu = [
-            # MenuItem(self, "Validate", 13, 3, 0, validate, "context for menu 1"),
-            MenuItem(self, "Exit Program", 14, 3, 0, program_cancel, ""),
-            MenuItem(self, "Cancel", 7, 3, 0, view_cancel, "context for menu 2"),
-            MenuItem(self, "Ok-Run", 7, 3, 0, run_remove_prefix_notdisconnect, "context for menu 3")
+            # MenuItem(self, "Validate", 3, 0, validate, "context for menu 1"),
+            MenuItem(self, "Exit Program", 3, FKEY_CTRL_F1,  program_cancel,                  ""),
+            MenuItem(self, "Cancel",       3, FKEY_CTRL_F2,  view_cancel,                     "context for menu 2"),
+            MenuItem(self, "Ok-Run",       3, FKEY_CTRL_F3,  run_remove_prefix_notdisconnect, "context for menu 3")
         ]
 
         remove_prefixes_not_with_disconnect_view = DataEntryView(self, "add_not_new_install",
@@ -264,27 +264,37 @@ class App(AppBase):
         ]
 
         config_menu = [
-            MenuItem(self, "Exit Program", 14, 3, 0, program_cancel, ""),
-            MenuItem(self, "Cancel", 7, 3, 0, view_cancel, "context for menu 2"),
-            MenuItem(self, "Save", 7, 3, 0, run_config_action, "context for menu 3")
+            MenuItem(self, "Exit Program", 3, FKEY_CTRL_F1, program_cancel,    ""),
+            MenuItem(self, "Cancel",       3, FKEY_CTRL_F2, view_cancel,       "context for menu 2"),
+            MenuItem(self, "Save",         3, FKEY_CTRL_F3, run_config_action, "context for menu 3")
         ]
 
         config_view = DataEntryView(self, "config", "AORC Config values", self.stdscr,
                            config_widgets,
                            config_menu)
 
+        help_view = HelpView(self, "help_view", "Help", self.stdscr)
+        quit_view = QuitView(self, "quit_view", "Quit", self.stdscr)
         #####################################
         # topmenu start
         #####################################
         topmenu_items = [ 
-            TopMenuWidget(self, "tm01", "AddNew F1",     0x109, add_prefixes_new_install_view),
-            TopMenuWidget(self, "tm02", "AddNotNew F2",  0x10a, add_prefixes_not_new_install_view),
-            TopMenuWidget(self, "tm03", "RemDisc F3",    0x10b, remove_prefixes_with_disconnect_view),
-            TopMenuWidget(self, "tm04", "RemNotDisc F4", 0x10c, remove_prefixes_not_with_disconnect_view),
-            TopMenuWidget(self, "tm05", "Config F5",     0x10d, config_view),
-            TopMenuWidget(self, "tm06", "Banner F6",     0x10e, view_banner),
+            TopMenuWidget(self, "tm01",   "AddNew",     3, FKEY_F1, add_prefixes_new_install_view),
+            TopMenuWidget(self, "tm02",   "AddNotNew",  3, FKEY_F2, add_prefixes_not_new_install_view),
+            TopMenuWidget(self, "tm03",   "RemDisc",    3, FKEY_F3, remove_prefixes_with_disconnect_view),
+            TopMenuWidget(self, "tm04",   "RemNotDisc", 3, FKEY_F4, remove_prefixes_not_with_disconnect_view),
+            TopMenuWidget(self, "tm05",   "Config",     3, FKEY_F5, config_view),
+            TopMenuWidget(self, "tm06",   "Banner",     3, FKEY_F6, view_banner),
+            TopMenuWidget(self, "tmhelp", "Help",       3, FKEY_F7, help_view),
+            TopMenuWidget(self, "tmquit", "Quit?",      3, FKEY_F8, quit_view)
         ]
-        topmenu = TopmenuView(self, FigletWidget("Test"), topmenu_items)
+        topmenu = TopmenuView(self, FigletWidget("AORC"), topmenu_items)
+        #####################################
+        # topmenu start
+        #####################################
+        self.topmenu_view = topmenu
+
+
         #####################################
         # link views and topmenu to app
         #####################################
@@ -298,7 +308,8 @@ class App(AppBase):
             remove_prefixes_not_with_disconnect_view,
             config_view,
             view_banner,
-            # view_help,
+            help_view,
+            quit_view
         ]
 
 
