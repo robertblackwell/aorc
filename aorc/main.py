@@ -99,7 +99,7 @@ class App(AppBase):
                 TextWidget(self, "bus_org_id",        "Business Org ID ", 23, data),
                 ToggleWidget(self, "is_marvel_order", "Marvel Order ?  ", 3, data, ['No ', "Yes"]),
                 ToggleWidget(self, "is_dm_order",     "DM order     ?  ", 3, data, ['No ', "Yes"]),
-                BlockTextWidget(self, [" "," "]),
+                BlockTextWidget(self, ["",""]),
 
                 ToggleWidget(self, "is_aorc_capitalized",
                                                     "Is aorc capitalized            ", 3, data, ['No ', "Yes"]),
@@ -137,7 +137,7 @@ class App(AppBase):
                 BlockTextWidget(self, [
                         "Select the order Type",
                         "    If not Marvel order or DM order",
-                        "    you must enter a Business Org Id or", 
+                        "    you must enter a Business Org Id", 
                 ]),
                 DropdownWidget(self, "order_type", "Select Order Type", 23, 1, data, sel),
                 TextWidget(self, "bus_org_id", "Business Org ID     ", 23, data),
