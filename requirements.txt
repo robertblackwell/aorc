@@ -1,2 +1,2 @@
 pyfiglet==0.8.post1
-simple-curses @ git+https://github.com/robertblackwell/simple_curses@2782a7d2c6f39c74beccf99105594a590882bf03
+-e git+ssh://git@github.com/robertblackwell/simple_curses.git@0e9733625d8fc2a22ce9842ddfce9bcf6568723e#egg=simple_curses
